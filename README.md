@@ -59,7 +59,7 @@ python main.py
 
 ## TODO
 
-* unit tests (runnable locally)
-* a system diagram of your solution deployed to Kubernetes
+* update and improve docstrings
 * improve logging/tracing
+* add github actions pipeline for tests
 * improve Kubernetes Architecture Diagram
