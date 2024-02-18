@@ -16,12 +16,11 @@ use the docker-compose to launch a database instance:
 docker compose up
 ```
 
-Generate some dummy_data using the script in data/:
+Generate some dummy data using etl cli app
 
 ```commandline
-cd data 
-python generate_dummy_data.py
-cd -
+python cli.py --help 
+python cli.py generate-dummy-data
 ```
 
 Use the cli application to do ETL
