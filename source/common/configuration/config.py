@@ -4,7 +4,7 @@ from urllib import parse
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
-ROOT_DIRECTORY: pathlib.Path = pathlib.Path(__file__).parent.parent.parent
+ROOT_DIRECTORY: pathlib.Path = pathlib.Path(__file__).parent.parent.parent.parent
 
 
 class DatabaseConfig(BaseSettings):

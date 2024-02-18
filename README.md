@@ -31,11 +31,22 @@ python cli.py etl-single-file data/retail_data_medium.csv
 python cli.py etl-multiple-files /data
 ```
 
+Note: make sure to install these dependencies if you are working locally (linux)
+```commandline
+#for postgres psycopg2 driver
+apt update && apt install -y build-essential libpq-dev
+```
+
 You can run the web application and check it at `http://localhost:8000/docs`
 
 ```commandline
 python main.py
 ```
+
+## Kubernetes Architecture Diagram
+
+![Alt Text](./docs/acetl_kubernetes_diagram.drawio.png)
+
 
 ## Done
 
@@ -52,3 +63,4 @@ python main.py
 * unit tests (runnable locally)
 * a system diagram of your solution deployed to Kubernetes
 * improve logging/tracing
+* improve Kubernetes Architecture Diagram

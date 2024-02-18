@@ -2,12 +2,17 @@ import pathlib
 
 from sqlalchemy import create_engine
 
-from source.common.configuration import DatabaseConfig
 from source.acetl_etl.simple_etl import SimpleETLPipeline
-from source.common.models import Base
+from source.common.configuration.config import DatabaseConfig
+from source.common.models.product_model import Base
 
 
-def test_simple_etl(data_path: str):
+def simple_etl_testing(data_path: str):
+    """
+    TODO, not exactly a test, need to be completed
+    :param data_path:
+    :return:
+    """
     engine = create_engine(DatabaseConfig().database_url)
 
     Base.metadata.create_all(engine)

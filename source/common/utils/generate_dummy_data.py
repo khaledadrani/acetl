@@ -1,8 +1,8 @@
+import csv
 import random
 from typing import List, Dict
-import pandas as pd
+
 from faker import Faker
-import csv
 
 random.seed(42)
 fake = Faker()
@@ -30,9 +30,6 @@ def generate_fake_data(num_records: int, unclean_prob: float = 0.2) -> List[Dict
 
         data_list.append(record)
 
-    df = pd.DataFrame(data_list)
-    # simply to check if generated data contains missing values
-    print("NA columns? ", df.isna().sum())
     return data_list
 
 
@@ -46,8 +43,4 @@ def save_to_csv(data, filename):
             writer.writerow(record)
 
 
-save_to_csv(generate_fake_data(100), 'retail_data_small.csv')
-save_to_csv(generate_fake_data(10000), 'retail_data_medium.csv')
-save_to_csv(generate_fake_data(1000000), 'retail_data_large.csv')
 
-print("CSV files generated successfully.")

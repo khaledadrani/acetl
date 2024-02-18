@@ -1,27 +1,21 @@
-from fastapi import APIRouter
+from dependency_injector.wiring import inject, Provide
+from fastapi import APIRouter, Depends
 
-from source.acetl_web.database_helper import Database
-from source.acetl_web.repository import ProductRepository
+from source.acetl_web.inversion_of_control import DependencyContainer
 from source.acetl_web.schema import ProductFirstChunkList
-from source.common.configuration.config import DatabaseConfig
+from source.acetl_web.service import ProductService
 
 data_fetch_router = APIRouter(prefix="/read")
 
 
 @data_fetch_router.get("/first-chunk", response_model=ProductFirstChunkList)
-def get_first_chunk() -> ProductFirstChunkList:
+@inject
+def get_first_chunk(
+        product_service: ProductService = Depends(Provide[DependencyContainer.product_service])
+) -> ProductFirstChunkList:
     """
-    •Description: Returns the first 10 lines from Database
-    •Request: Get /read/first-chunck
-    •Response: 200 OK
-    •Response Body: JSON
-    •Response Body Description: A list of 10 JSON objects
-    :return:
+    Returns the first 10 lines from the Product Table
+    :return: ProductFirstChunkList
     """
 
-    db_helper = Database(DatabaseConfig().database_url)
-
-    with db_helper.session() as session:
-        repository = ProductRepository(session=session)
-
-        return ProductFirstChunkList(data=repository.get_first_chunk())
+    return product_service.get_data_overview()

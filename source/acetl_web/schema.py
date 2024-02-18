@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional, List
 from uuid import UUID
 
-from pydantic import BaseModel, Field, AliasChoices
+from pydantic import BaseModel, Field, AliasChoices, ConfigDict
 
 data_status_alias = AliasChoices('dataStatus', 'data_status')
 
@@ -16,12 +16,7 @@ class ProductDTO(BaseModel):
     category: Optional[str] = Field(validation_alias=AliasChoices("category", "Category"))
     creation_date: datetime
 
-    class Config:
-        """
-        from_orm is deprecated,
-        use from_attribute=True and model_validate method instead in pydantic v2
-        """
-        from_attributes = True
+    model_config = ConfigDict(extra='ignore', from_attributes=True)
 
 
 class ProductFirstChunkList(BaseModel):

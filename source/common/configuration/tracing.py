@@ -20,6 +20,15 @@ tracer = trace.get_tracer("acetl.tracer")
 
 
 def trace_process(func: Callable, span_name: str, *args, **kwargs) -> Any:
+    """
+    TODO implement a more robust way of tracing
+    TODO a logging solution such as Fluentd or Loki to collect logs from all components
+    :param func:
+    :param span_name:
+    :param args:
+    :param kwargs:
+    :return:
+    """
     with tracer.start_as_current_span(span_name) as span:
         start_time = time.time()
         result = func(*args, **kwargs)
