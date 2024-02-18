@@ -1,36 +1,40 @@
+import random
+from typing import List, Dict
+import pandas as pd
 from faker import Faker
 import csv
 
-# Create a Faker instance
+random.seed(42)
 fake = Faker()
 
-# Generate dummy data for healthcare
-def generate_healthcare_data(num_records):
-    healthcare_data = []
-    for _ in range(num_records):
-        record = {
-            'Patient Name': fake.name(),
-            'Patient ID': fake.uuid4(),
-            'Doctor': fake.name(),
-            'Diagnosis': fake.word(),
-            'Treatment': fake.sentence()
-        }
-        healthcare_data.append(record)
-    return healthcare_data
 
-# Generate dummy data for retail
-def generate_retail_data(num_records):
-    retail_data = []
+def generate_fake_data(num_records: int, unclean_prob: float = 0.2) -> List[Dict]:
+    data_list = []
     for _ in range(num_records):
+
         record = {
             'Product Name': fake.word(),
-            'Product ID': fake.uuid4(),
+            'Product Code': fake.uuid4(),
             'Price': fake.random_number(digits=2),
             'Quantity': fake.random_number(digits=1),
             'Category': fake.word()
         }
-        retail_data.append(record)
-    return retail_data
+
+        current_proba = random.uniform(0, 1)
+        is_bad_data = current_proba < unclean_prob
+
+        if is_bad_data:
+            # Simulate null values or incorrect data types
+            field_to_unclean = random.choice(list(record.keys()))
+            record[field_to_unclean] = None if random.choice([True, False]) else fake.word()
+
+        data_list.append(record)
+
+    df = pd.DataFrame(data_list)
+    # simply to check if generated data contains missing values
+    print("NA columns? ", df.isna().sum())
+    return data_list
+
 
 # Save data to CSV file
 def save_to_csv(data, filename):
@@ -41,14 +45,9 @@ def save_to_csv(data, filename):
         for record in data:
             writer.writerow(record)
 
-# Generate and save healthcare data
-num_healthcare_records = 100
-healthcare_data = generate_healthcare_data(num_healthcare_records)
-save_to_csv(healthcare_data, 'healthcare/healthcare_data_3.csv')
 
-# Generate and save retail data
-num_retail_records = 100
-retail_data = generate_retail_data(num_retail_records)
-save_to_csv(retail_data, 'retail/retail_data_3.csv')
+save_to_csv(generate_fake_data(100), 'retail_data_small.csv')
+save_to_csv(generate_fake_data(10000), 'retail_data_medium.csv')
+save_to_csv(generate_fake_data(1000000), 'retail_data_large.csv')
 
 print("CSV files generated successfully.")

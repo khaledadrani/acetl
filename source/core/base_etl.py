@@ -14,6 +14,9 @@ class BaseETLPipeline(ABC):
     def load(self):
         ...
 
-    @abstractmethod
-    def get_data(self):
-        ...
+    def __call__(self, *args, **kwargs):
+        self.extract()
+
+        self.transform()
+
+        self.load()
