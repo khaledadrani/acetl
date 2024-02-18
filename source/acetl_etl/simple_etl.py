@@ -8,9 +8,9 @@ from loguru import logger
 from sqlalchemy import create_engine, Integer, Double, String
 from sqlalchemy.orm import Session
 
-from source.configuration.tracing import tracer, trace_process
-from source.core.base_etl import BaseETLPipeline
-from source.models.product_model import ProductModel, SqlAlchemyUUID
+from source.acetl_etl.base_etl import BaseETLPipeline
+from source.common.configuration.tracing import trace_process
+from source.common.models.product_model import ProductModel, SqlAlchemyUUID
 
 
 def parse_valid_uuid(value):

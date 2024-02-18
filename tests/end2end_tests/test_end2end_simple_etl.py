@@ -2,9 +2,9 @@ import pathlib
 
 from sqlalchemy import create_engine
 
-from source.configuration.config import DatabaseConfig
-from source.core.simple_etl import SimpleETLPipeline
-from source.models.product_model import Base
+from source.common.configuration import DatabaseConfig
+from source.acetl_etl.simple_etl import SimpleETLPipeline
+from source.common.models import Base
 
 
 def test_simple_etl(data_path: str):

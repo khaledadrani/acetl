@@ -4,8 +4,8 @@ from typing import List
 
 from loguru import logger
 
-from source.configuration.config import DatabaseConfig
-from source.core.simple_etl import SimpleETLPipeline
+from source.acetl_etl.simple_etl import SimpleETLPipeline
+from source.common.configuration.config import DatabaseConfig
 
 
 def call_etl_for_a_single_file(data_path: str):

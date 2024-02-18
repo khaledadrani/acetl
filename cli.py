@@ -1,22 +1,14 @@
+import pathlib
+
 import typer
 from loguru import logger
-from sqlalchemy import create_engine
-import pathlib
-from source.configuration.config import DatabaseConfig
-from source.core.multiple_files_etl import MultipleFilesETLPipeline
-from source.core.simple_etl import SimpleETLPipeline
-from source.models.product_model import Base
-from opentelemetry import trace
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import ConsoleSpanExporter
-from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
-db_config = DatabaseConfig()
+from source.acetl_etl.multiple_files_etl import MultipleFilesETLPipeline
+from source.acetl_etl.simple_etl import SimpleETLPipeline
+from source.common.configuration.config import DatabaseConfig
+from source.common.utils.init_db import initialize_database
 
-engine = create_engine(db_config.database_url)
-
-Base.metadata.create_all(engine)
+initialize_database()
 
 cli_app = typer.Typer()
 
@@ -24,6 +16,7 @@ cli_app = typer.Typer()
 @cli_app.command()
 def etl_single_file(data_path: str):
     data_path = pathlib.Path(data_path)
+    db_config = DatabaseConfig()
 
     if not data_path.exists():
         logger.error(f"{data_path.stem} does not exist!")
@@ -49,21 +42,4 @@ def etl_multiple_files(data_directory: str):
 
 
 if __name__ == "__main__":
-    tracer = trace.get_tracer(__name__)
-
-    trace.set_tracer_provider(TracerProvider())
-
-    # Set up the tracer provider
-    trace.set_tracer_provider(TracerProvider())
-
-    # Set up the span exporter
-    trace.get_tracer_provider().add_span_processor(
-        SimpleSpanProcessor(ConsoleSpanExporter())
-    )
-
-    # Get the tracer
-    tracer = trace.get_tracer(__name__)
-
-    # Create a new root span, set it as the current span in context
-    with tracer.start_as_current_span("parent"):
-        cli_app()
+    cli_app()
