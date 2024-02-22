@@ -1,11 +1,11 @@
 import pathlib
 
 import typer
-from loguru import logger
 
 from source.acetl_etl.multiple_files_etl import MultipleFilesETLPipeline
 from source.acetl_etl.simple_etl import SimpleETLPipeline
 from source.common.configuration.config import DatabaseConfig, ROOT_DIRECTORY
+from source.common.configuration.logging_config import logger
 from source.common.utils.generate_dummy_data import save_to_csv, generate_fake_data
 from source.common.utils.init_db import initialize_database
 
@@ -16,9 +16,9 @@ cli_app = typer.Typer()
 
 @cli_app.command()
 def generate_dummy_data():
-    save_to_csv(generate_fake_data(100), str(ROOT_DIRECTORY/'data/retail_data_small.csv'))
-    save_to_csv(generate_fake_data(10000), str(ROOT_DIRECTORY/'data/retail_data_medium.csv'))
-    save_to_csv(generate_fake_data(1000000), str(ROOT_DIRECTORY/'data/retail_data_large.csv'))
+    save_to_csv(generate_fake_data(100), str(ROOT_DIRECTORY / 'data/retail_data_small.csv'))
+    save_to_csv(generate_fake_data(10000), str(ROOT_DIRECTORY / 'data/retail_data_medium.csv'))
+    save_to_csv(generate_fake_data(1000000), str(ROOT_DIRECTORY / 'data/retail_data_large.csv'))
 
     print("CSV files generated successfully.")
 

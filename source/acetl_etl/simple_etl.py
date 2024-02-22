@@ -4,11 +4,11 @@ from typing import Optional
 
 import pandas as pd
 import profilehooks
-from loguru import logger
 from sqlalchemy import create_engine, Integer, Double, String
 from sqlalchemy.orm import Session
 
 from source.acetl_etl.base_etl import BaseETLPipeline
+from source.common.configuration.logging_config import logger
 from source.common.configuration.tracing import trace_process
 from source.common.models.product_model import ProductModel, SqlAlchemyUUID
 

@@ -7,7 +7,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker, Session
 
 class Database:
     def __init__(self, db_url: str) -> None:
-        self.engine = create_engine(db_url, echo=True)
+        self.engine = create_engine(db_url, echo=False)
         self.session_factory = scoped_session(
             sessionmaker(
                 autocommit=False,
