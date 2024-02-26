@@ -47,10 +47,83 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "admin"
     container_name: acetl_pgadmin
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - postgres_data:/var/lib/pgadmin
+
+  spring-boot-admin:
+    image: michayaak/spring-boot-admin:2.2.3-1
+    ports:
+      - "8080:8080"
+    container_name: spring-boot-admin-container
+    restart: unless-stopped
+
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - "GF_AUTH_DISABLE_LOGIN_FORM=true"
+      - "GF_AUTH_ANONYMOUS_ENABLED=true"
+      - "GF_AUTH_ANONYMOUS_ORG_ROLE=Admin"
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+          - name: Loki
+            type: loki
+            access: proxy
+            url: http://loki:3100
+        EOF
+        /run.sh
+    ports:
+      - "3000:3000"
+    depends_on:
+      - loki
+    networks:
+      - loki
+
+  promtail:
+    image: grafana/promtail:2.8.0
+    volumes:
+      - ./promtail-local-config.yaml:/etc/promtail/config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yaml
+    networks:
+      - loki
+
+  flog:
+    image: mingrammer/flog
+    command: -f json -d 1s -l
+    networks:
+      - loki
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "4317:4317"    # Jaeger Thrift HTTP
+      - "4318:4318"    # Jaeger Thrift Compact
+      - "9411:9411"    # Zipkin
 
 
 volumes:
   postgres_data:
+
+
+networks:
+  loki:

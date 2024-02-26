@@ -1,15 +1,24 @@
 import time
 from typing import Callable, Any
 
-from opentelemetry import trace
+from opentelemetry import trace, metrics
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics._internal.export import PeriodicExportingMetricReader
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.resources import SERVICE_NAME
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
-    ConsoleSpanExporter,
 )
 
-provider = TracerProvider()
-processor = BatchSpanProcessor(ConsoleSpanExporter())
+resource = Resource(attributes={
+    SERVICE_NAME: "acetl-service"
+})
+
+provider = TracerProvider(resource=resource)
+processor = BatchSpanProcessor(OTLPSpanExporter(endpoint="<traces-endpoint>/v1/traces"))
 provider.add_span_processor(processor)
 
 # Sets the global default tracer provider
@@ -17,6 +26,12 @@ trace.set_tracer_provider(provider)
 
 # Creates a tracer from the global tracer provider
 tracer = trace.get_tracer("acetl.tracer")
+
+reader = PeriodicExportingMetricReader(
+    OTLPMetricExporter(endpoint="<traces-endpoint>/v1/metrics")
+)
+meterProvider = MeterProvider(resource=resource, metric_readers=[reader])
+metrics.set_meter_provider(meterProvider)
 
 
 def trace_process(func: Callable, span_name: str, *args, **kwargs) -> Any:

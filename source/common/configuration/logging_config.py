@@ -1,6 +1,3 @@
-import queue
-from logging.handlers import QueueHandler, QueueListener
-
 """
 "timestamp": The date and time when the log entry was created. It is represented in the ISO 8601 format. In this case, the timestamp is "2023-04-18T13:30:00Z".
 
@@ -55,6 +52,30 @@ from logging.handlers import QueueHandler, QueueListener
 # logging.info('So should this')
 # logging.warning('And this, too')
 import logging
+from typing import Optional
+
+from pydantic import BaseModel
+
+
+class Tags(BaseModel):
+    http_method: Optional[str] = None
+    http_path: Optional[str] = None
+    http_status_code: Optional[int] = None
+
+
+class LogEntry(BaseModel):
+    timestamp: Optional[str] = None
+    level: Optional[str] = None
+    message: Optional[str] = None
+    correlation_id: Optional[str] = None
+    session_id: Optional[str] = None
+    span_id: Optional[str] = None
+    trace_id: Optional[str] = None
+    service_name: Optional[str] = None
+    operation_name: Optional[str] = None
+    tags: Optional[Tags] = None
+    log_type: Optional[str] = None
+    duration_ms: Optional[int] = None
 
 
 class StandardLogRecordHandler(logging.StreamHandler):
@@ -96,35 +117,7 @@ def create_logger(name: str = __name__, logging_level: int = logging.INFO) -> lo
     return logger
 
 
-def create_advanced_logger(name: str = __name__, logging_level: int = logging.INFO):
-    # try this later logging.config.fileConfig('logging.conf')
-    que = queue.Queue(-1)  # no limit on size
-    queue_handler = QueueHandler(que)
-    # create console handler and set level to debug
-    ch = StandardLogRecordHandler()
-    ch.setLevel(logging.DEBUG)
-
-    # create formatter
-    formatter = logging.Formatter(
-        '%(asctime)s - %(threadName)s - %(lineno)d - %(funcName)s - %(levelname)s - %(message)s')
-    # add formatter to ch
-    ch.setFormatter(formatter)
-
-    listener = QueueListener(que, ch)
-
-    logger = logging.getLogger(name)
-    logger.setLevel(logging_level)
-
-    logger.addHandler(queue_handler)
-
-    listener.start()
-
-    logger.warning('Look out!')
-
-    return logger
-
-
-logger = create_advanced_logger()
+logger = create_logger()
 
 # logger.debug("%s ... %s", "Welcome", "Yaw")
 # # 'application' code
