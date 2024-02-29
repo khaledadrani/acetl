@@ -63,3 +63,7 @@ python main.py
 * improve logging/tracing
 * add github actions pipeline for tests
 * improve Kubernetes Architecture Diagram
+
+## references
+
+* https://dev.to/ken_mwaura1/getting-started-monitoring-a-fastapi-app-with-grafana-and-prometheus-a-step-by-step-guide-3fbn
