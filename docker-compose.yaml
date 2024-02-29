@@ -109,6 +109,14 @@ services:
     networks:
       - loki
 
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./source/common/configuration/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: jaeger
