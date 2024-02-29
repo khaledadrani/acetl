@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 
 from source.common.configuration.config import DatabaseConfig
+
 from source.common.models.product_model import Base
 
 

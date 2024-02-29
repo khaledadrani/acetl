@@ -21,4 +21,4 @@ class ProductService:
             # using a minimal Unit of Work Pattern
             repository = self.repository_type(session=session)
 
-            return ProductFirstChunkList(data=repository.get_first_chunk())
+            return ProductFirstChunkList(data=repository.peek_at_first_chunk())

@@ -45,16 +45,18 @@
     "duration_ms": 50
 }
 """
-
-# The default format for date/time display (shown above) is like ISO8601 or RFC 3339.
-# logging.basicConfig(format='%(asctime)s::%(levelname)s:::%(message)s', level=logging.DEBUG)
-# logging.debug('This message should appear on the console')
-# logging.info('So should this')
-# logging.warning('And this, too')
+import contextvars
+import json
 import logging
+import logging.config
+import logging.config
+from datetime import datetime
 from typing import Optional
 
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
+
+context_var_sub = contextvars.ContextVar('sub', default=None)
 
 
 class Tags(BaseModel):
@@ -64,7 +66,7 @@ class Tags(BaseModel):
 
 
 class LogEntry(BaseModel):
-    timestamp: Optional[str] = None
+    timestamp: Optional[datetime] = None
     level: Optional[str] = None
     message: Optional[str] = None
     correlation_id: Optional[str] = None
@@ -85,16 +87,43 @@ class StandardLogRecordHandler(logging.StreamHandler):
     configured locally.
     """
 
-    def emit(self, record):
-        # if a name is specified, we use the named logger rather than the one
-        # implied by the record.
-        # print(record)
+    # def emit(self, record):
+    #     # if a name is specified, we use the named logger rather than the one
+    #     # implied by the record.
+    #     # print(record)
+    #
+    #     # N.B. EVERY record gets logged. This is because Logger.handle
+    #     # is normally called AFTER logger-level filtering. If you want
+    #     # to do filtering, do it at the client end to save wasting
+    #     # cycles and network bandwidth!
+    #     user_id = context_var_sub.get()
+    #
+    #     # print("user id ", user_id)
+    #     # print("hey you")
+    #     return record
 
-        # N.B. EVERY record gets logged. This is because Logger.handle
-        # is normally called AFTER logger-level filtering. If you want
-        # to do filtering, do it at the client end to save wasting
-        # cycles and network bandwidth!
-        return record
+    # this will overide formatter
+    def format_log_entry(self, record) -> str:
+        tags = Tags()
+        tags.http_method = "GET"  # Filling with default values
+        tags.http_path = "/default/path"
+        tags.http_status_code = 200
+
+        log_entry = LogEntry(
+            timestamp=datetime.fromtimestamp(record.created),
+            level=record.levelname,
+            message=record.getMessage(),
+            service_name=record.module,
+            operation_name=record.funcName,
+            tags=tags,
+            log_type="request",
+            duration_ms=1000  # Example duration
+        )
+        return json.dumps(jsonable_encoder(log_entry.model_dump()))
+
+    def format(self, record):
+        formatted_record = self.format_log_entry(record)
+        return formatted_record
 
 
 def create_logger(name: str = __name__, logging_level: int = logging.INFO) -> logging.Logger:
@@ -117,12 +146,10 @@ def create_logger(name: str = __name__, logging_level: int = logging.INFO) -> lo
     return logger
 
 
+# if False:
+#     # make sure that you import this logger
+#     logging.config.fileConfig(fname='log_config.ini', disable_existing_loggers=False)
+#     logger = logging.getLogger(__name__)
+#
+# else:
 logger = create_logger()
-
-# logger.debug("%s ... %s", "Welcome", "Yaw")
-# # 'application' code
-# logger.debug('debug message')
-# logger.info('info message')
-# logger.warning('warn message')
-# logger.error('error message')
-# logger.critical('critical message')

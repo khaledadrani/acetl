@@ -12,7 +12,7 @@ class ProductRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_first_chunk(self, limit_value: int = 10) -> List[ProductDTO]:
+    def peek_at_first_chunk(self, limit_value: int = 10) -> List[ProductDTO]:
         result = (self.session.query(ProductModel)
                   # .order_by(desc(ProductModel.creation_date))
                   .limit(limit_value))

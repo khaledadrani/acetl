@@ -4,6 +4,7 @@ import uuid
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
+# from source.common.configuration.logging_config import logger, context_var_sub
 from source.common.configuration.tracing import tracer
 
 
@@ -27,3 +28,25 @@ class MonitoringMiddleware(BaseHTTPMiddleware):
             span.set_attribute("operation.name", span_name)
 
             return result
+
+
+from fastapi import Request
+from starlette.middleware.base import BaseHTTPMiddleware
+
+
+class TestMiddleware(BaseHTTPMiddleware):
+    def __init__(
+            self,
+            app,
+    ):
+        super().__init__(app)
+
+    async def dispatch(self, request: Request, call_next):
+        # do something with the request object, for example
+        content_type = request.headers.get('Content-Type')
+        context_var_sub.set("c56fc41b-d688-4e21-9b07-e0e5733520d5")
+        # process the request and get the response
+        response = await call_next(request)
+
+        logger.info(f"After request {content_type}")
+        return response
