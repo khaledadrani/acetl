@@ -4,7 +4,7 @@ from functools import partial
 import pandas as pd
 import pytest
 
-from source.acetl_etl.simple_etl import SimpleETLPipeline
+from source.etl_acetl.simple_etl import SimpleETLPipeline
 from source.common.configuration.config import ROOT_DIRECTORY, DatabaseConfig
 from source.common.utils.generate_dummy_data import save_to_csv, generate_fake_data
 

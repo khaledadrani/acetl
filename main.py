@@ -19,7 +19,7 @@ web_app.container = DependencyContainer()
 
 app_config = AppConfig()
 
-web_app.include_router(data_fetch_router, tags=["LLM GENERATION API"])
+web_app.include_router(data_fetch_router, tags=["CSV EXTRACTION"])
 
 # Run the FastAPI application with uvicorn
 if __name__ == "__main__":

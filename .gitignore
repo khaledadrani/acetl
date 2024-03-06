@@ -161,4 +161,5 @@ cython_debug/
 
 *.zip
 
-data/*.csv
+**.csv
+**.pdf

@@ -8,17 +8,10 @@ from loguru import logger
 from sqlalchemy import create_engine, Integer, Double, String
 from sqlalchemy.orm import Session
 
-from source.acetl_etl.base_etl import BaseETLPipeline
 from source.common.configuration.tracing import trace_process
+from source.common.domain.base_etl import BaseETLPipeline
 from source.common.models.product_model import ProductModel, SqlAlchemyUUID
-
-
-def parse_valid_uuid(value):
-    try:
-        uuid.UUID(value)
-        return value
-    except (ValueError, AttributeError):
-        return None
+from source.common.utils.common_utils import parse_valid_uuid
 
 
 class SimpleETLPipeline(BaseETLPipeline):

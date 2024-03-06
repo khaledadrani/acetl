@@ -3,8 +3,8 @@ import pathlib
 import typer
 from loguru import logger
 
-from source.acetl_etl.multiple_files_etl import MultipleFilesETLPipeline
-from source.acetl_etl.simple_etl import SimpleETLPipeline
+from source.etl_acetl.multiple_files_etl import MultipleFilesETLPipeline
+from source.etl_acetl.simple_etl import SimpleETLPipeline
 from source.common.configuration.config import DatabaseConfig, ROOT_DIRECTORY
 from source.common.utils.generate_dummy_data import save_to_csv, generate_fake_data
 from source.common.utils.init_db import initialize_database
