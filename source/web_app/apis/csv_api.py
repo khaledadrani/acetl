@@ -1,9 +1,9 @@
 from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends
 
-from source.acetl_web.inversion_of_control import DependencyContainer
-from source.acetl_web.schema import ProductFirstChunkList
-from source.acetl_web.service import ProductService
+from source.web_app.config.injection import DependencyContainer
+from source.web_app.schema.csv_demo_schema import ProductFirstChunkList
+from source.web_app.services.csv_demo_service import ProductService
 
 data_fetch_router = APIRouter(prefix="/read")
 

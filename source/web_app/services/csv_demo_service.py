@@ -1,9 +1,10 @@
 from typing import Type
 
-from source.acetl_web.database_helper import Database
-from source.acetl_web.repository import ProductRepository
-from source.acetl_web.schema import ProductFirstChunkList
+
 from source.common.configuration.config import DatabaseConfig
+from source.common.helpers.database_helper import Database
+from source.web_app.repositories.csv_repository import ProductRepository
+from source.web_app.schema.csv_demo_schema import ProductFirstChunkList
 
 
 class ProductService:

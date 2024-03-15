@@ -1,9 +1,9 @@
 from dependency_injector import containers, providers
 
-from source.acetl_web.database_helper import Database
-from source.acetl_web.repository import ProductRepository
-from source.acetl_web.service import ProductService
 from source.common.configuration.config import DatabaseConfig
+from source.common.helpers.database_helper import Database
+from source.web_app.repositories.csv_repository import ProductRepository
+from source.web_app.services.csv_demo_service import ProductService
 
 
 class DependencyContainer(containers.DeclarativeContainer):

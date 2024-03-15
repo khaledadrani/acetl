@@ -3,9 +3,10 @@ from typing import Iterable, List
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
-from source.acetl_web.schema import ProductDTO
+
 from source.common.configuration.config import DatabaseConfig
 from source.common.models.product_model import ProductModel
+from source.web_app.schema.csv_demo_schema import ProductDTO
 
 
 class ProductRepository:

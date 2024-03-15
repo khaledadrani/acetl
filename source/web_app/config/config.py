@@ -12,3 +12,6 @@ class AppConfig(BaseSettings):
 
     DEBUG: bool = Field(description="Use this to enable dev and debugging features", default=False)
 
+
+app_config = AppConfig()
+

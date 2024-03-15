@@ -4,7 +4,7 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from main import web_app
-from source.acetl_web.service import ProductService
+from source.web_app.services.csv_demo_service import ProductService
 
 
 class TestDataReadRouter:
