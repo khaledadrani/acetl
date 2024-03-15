@@ -2,7 +2,7 @@ import pathlib
 
 from sqlalchemy import create_engine
 
-from source.etl_acetl.simple_etl import SimpleETLPipeline
+from source.etl_csv.simple_etl import SimpleETLPipeline
 from source.common.configuration.config import DatabaseConfig
 from source.common.models.product_model import Base
 

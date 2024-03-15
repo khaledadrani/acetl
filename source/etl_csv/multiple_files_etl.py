@@ -4,7 +4,7 @@ from typing import List
 
 from loguru import logger
 
-from source.etl_acetl.simple_etl import SimpleETLPipeline
+from source.etl_csv.simple_etl import SimpleETLPipeline
 from source.common.configuration.config import DatabaseConfig
 
 
