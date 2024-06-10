@@ -27,6 +27,7 @@ class LocalFileSystem(FileSystemInterface):
         with open(file_path, mode) as file:
             file.write(data)
 
+
     def get(self, key, mode: str = 'rb'):
         file_path = self.directory / pathlib.Path(key)
         try:
