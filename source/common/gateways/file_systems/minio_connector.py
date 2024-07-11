@@ -1,6 +1,6 @@
 import io
 
-from minio import Minio
+from minio import Minio, S3Error
 
 from source.common.gateways.file_systems.base import FileSystemInterface
 
