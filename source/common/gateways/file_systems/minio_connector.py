@@ -1,4 +1,5 @@
 import io
+from typing import Generator
 
 from minio import Minio, S3Error
 
