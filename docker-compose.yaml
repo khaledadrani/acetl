@@ -67,7 +67,18 @@ services:
     volumes:
       - minio_data:/data
 
+  solr:
+    image: solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - solr_data:/var/solr
+    command:
+      - solr-precreate
+      - gettingstarted
+
 
 volumes:
   postgres_data:
   minio_data:
+  solr_data:
